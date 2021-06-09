@@ -1,0 +1,114 @@
+package example.NewExample;
+
+import java.util.List;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.testng.Assert;
+
+public class dbstask {
+
+//Launching browser and url and Navigating to DBS screen using url "www.dbs.com.sg"
+	
+	public void dbsscreen() {
+		System.setProperty("webdriver.gecko.driver","C:\\Softwares\\geckodriver\\geckodriver.exe");
+		WebDriver driver= new FirefoxDriver();
+		driver.get("www.dbs.com.sg");
+		
+//Check if the launched page opened same url successfully
+		
+		String actualTitle = driver.getTitle();
+		String expectedTitle = "DBSpersonalpage"; // replace with the expected page title
+		Assert.assertTrue(expectedTitle.equals(actualTitle));
+		
+	 	
+//Clicking on Cards on top
+		
+		WebElement cardsmenu= driver.findElement(By.id("Cards"));
+		cardsmenu.click();
+		
+//Click on Credit cards
+		
+		WebElement Creditcards= driver.findElement(By.id("Credit Cards"));
+		Creditcards.click();
+		
+/*There are 2 ways where we can select the values from many cards either using list <webelement> or 
+ can use direct method of checkbox by taking path of checkbox */
+		
+//1st method of selecting checkbox with the help of card text 		
+//Get all elements from credit cards using list<Webelements> and select 2 cards 
+	
+		List<WebElement> options= Creditcards.findElements(By.tagName("//li[cards/../]"));
+		
+		for(WebElement option:options)
+		{
+			if("DBS Altitude Visa Signature Card".equals(option.getText()))
+			{
+				WebElement checkbox1= driver.findElement(By.xpath("//*[@type='dbssignatur/.../Compare']"));
+				checkbox1.click();
+				System.out.println("Card1 selected");
+			}else if ("DBS Altitude Visa Signature Card".equals(option.getText())) {
+				WebElement checkbox2= driver.findElement(By.xpath("//*[@type='dbsblackvisacard/.../compare']"));
+				checkbox2.click();
+				System.out.println("Card2 selected");
+			}else{
+				System.out.println("No items selected from credit card");
+			}
+	
+    WebElement comparebutton=driver.findElement(By.xpath("//*[@button='Compare']"));
+	comparebutton.click();
+
+
+//2nd Method: Select checkboxes with the help of text and path of checkbox 
+//selection of 2 cards 	
+ 		
+		WebElement checkBoxElement1 = driver.findElement(By.xpath("label[for='dbs signature/compare-checkbox-1']"));
+		boolean isSelected1 = checkBoxElement1.isSelected();
+				
+//Checking if it is already selected and perform click if element is not checked
+		if(isSelected1 == false) {
+			checkBoxElement1.click();
+		}	
+		WebElement checkBoxElement2 = driver.findElement(By.xpath("label[for='dbs black/compare-checkbox-2']"));
+		boolean isSelected2 = checkBoxElement1.isSelected();
+				
+//Checking if it is already selected and perform click if element is not checked		
+		if(isSelected2 == false) {
+			checkBoxElement2.click();
+		}	
+		
+		WebElement comparebtn=driver.findElement(By.xpath("//*[@button='Compare']"));
+		comparebtn.click();
+
+//Checking if the same selected cards/only selected cards displayed on the screen and compare the selected cards	
+		
+    List<WebElement> selectedcards= driver.findElements(By.tagName("//li[@='cards']"));
+		
+		for(WebElement option1:selectedcards)
+		{
+			if("DBS Altitude Visa Signature Card".equals(option1.getText()))
+			{
+				WebElement card1= driver.findElement(By.xpath("//*[@type='dbssignatur/.../Compare']"));
+				String cardselected1 = card1.getText();
+				String expectedText = "DBS Altitude Visa Signature Card"; // replace with the expected page title
+				Assert.assertTrue(expectedText.equals(cardselected1));
+			}else if("DBS Black Visa Card".equals(option1.getText()))
+				{
+					WebElement card2= driver.findElement(By.xpath("//*[@type='dbssignatur/.../Compare']"));
+					String cardselected2 = card2.getText();
+					String expectedText2 = "DBS Black Visa Card"; // replace with the expected page title
+					Assert.assertTrue(expectedText2.equals(cardselected2));
+			}else
+			{
+				System.out.println("No cards displayed");
+			}		
+				
+				
+}
+}
+}
+}
+
+	
